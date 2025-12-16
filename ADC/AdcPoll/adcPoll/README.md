@@ -264,7 +264,7 @@ A:
 ## 文件结构
 
 ```
-04_adc_polling/
+adcPoll/
 ├── Core/
 │   ├── Inc/
 │   │   └── adc_poll.h
