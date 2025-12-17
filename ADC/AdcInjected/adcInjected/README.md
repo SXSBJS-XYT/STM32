@@ -8,13 +8,13 @@
 
 ## 规则通道 vs 注入通道
 
-| 特性 | 规则通道 (Regular) | 注入通道 (Injected) |
-|------|-------------------|-------------------|
-| 最大通道数 | 16 | **4** |
-| 优先级 | 普通 | **高 (可打断规则)** |
-| 数据寄存器 | 1个共用 (DR) | **4个独立 (JDR1~4)** |
-| DMA支持 | 支持 | 不支持 |
-| 适用场景 | 连续/批量采集 | **紧急/高优先级采样** |
+| 特性       | 规则通道 (Regular) | 注入通道 (Injected)   |
+| ---------- | ------------------ | --------------------- |
+| 最大通道数 | 16                 | **4**                 |
+| 优先级     | 普通               | **高 (可打断规则)**   |
+| 数据寄存器 | 1个共用 (DR)       | **4个独立 (JDR1~4)**  |
+| DMA支持    | 支持               | 不支持                |
+| 适用场景   | 连续/批量采集      | **紧急/高优先级采样** |
 
 ## 工作模式说明
 
@@ -31,20 +31,20 @@
 
 ## 应用场景
 
-| 场景 | 说明 |
-|------|------|
+| 场景        | 说明                      |
+| ----------- | ------------------------- |
 | 电机FOC控制 | PWM中心点触发采集三相电流 |
-| 过流保护 | 比较器触发，立即采样电流 |
-| 紧急测量 | 软件需要立即获取某个值 |
-| 同步采样 | 外部事件触发精确时刻采样 |
+| 过流保护    | 比较器触发，立即采样电流  |
+| 紧急测量    | 软件需要立即获取某个值    |
+| 同步采样    | 外部事件触发精确时刻采样  |
 
 ## 硬件连接
 
-| 引脚 | 功能 | 连接 |
-|------|------|------|
-| PA0 | ADC1_IN0 (规则) | 接3.3V |
-| PA2 | ADC1_IN2 (注入) | 接GND |
-| PA9 | USART1_TX | 串口 |
+| 引脚 | 功能            | 连接   |
+| ---- | --------------- | ------ |
+| PA0  | ADC1_IN0 (规则) | 接3.3V |
+| PA2  | ADC1_IN2 (注入) | 接GND  |
+| PA9  | USART1_TX       | 串口   |
 
 ## CubeMX配置
 
@@ -54,49 +54,49 @@
 
 **Analog → ADC1 → Parameter Settings:**
 
-| 参数 | 值 |
-|------|-----|
-| Clock Prescaler | PCLK2 divided by 4 |
-| Resolution | 12 bits |
-| Scan Conversion Mode | Disabled |
-| Continuous Conversion Mode | Enabled |
-| DMA Continuous Requests | Disabled |
+| 参数                       | 值                 |
+| -------------------------- | ------------------ |
+| Clock Prescaler            | PCLK2 divided by 4 |
+| Resolution                 | 12 bits            |
+| Scan Conversion Mode       | Disabled           |
+| Continuous Conversion Mode | Enabled            |
+| DMA Continuous Requests    | Disabled           |
 
 ### 2. 规则通道配置
 
 **ADC_Regular_ConversionMode:**
 
-| 参数 | 值 |
-|------|-----|
-| Number Of Conversion | 1 |
-| External Trigger | Software Trigger |
-| Rank 1 Channel | **Channel 0** |
-| Rank 1 Sampling Time | 84 Cycles |
+| 参数                 | 值               |
+| -------------------- | ---------------- |
+| Number Of Conversion | 1                |
+| External Trigger     | Software Trigger |
+| Rank 1 Channel       | **Channel 0**    |
+| Rank 1 Sampling Time | 84 Cycles        |
 
 ### 3. 注入通道配置 (关键!)
 
 **ADC_Injected_ConversionMode:**
 
-| 参数 | 值 | 说明 |
-|------|-----|------|
-| **Number Of Conversion** | **1** | 注入通道数量 |
-| External Trigger | Software Trigger | 或外部触发 |
-| Injected Conversion Mode | **Discontinuous** | |
+| 参数                     | 值                | 说明         |
+| ------------------------ | ----------------- | ------------ |
+| **Number Of Conversion** | **1**             | 注入通道数量 |
+| External Trigger         | Software Trigger  | 或外部触发   |
+| Injected Conversion Mode | **Discontinuous** |              |
 
 展开 **Rank 1:**
 
-| 参数 | 值 |
-|------|-----|
-| Channel | **Channel 1** |
-| Sampling Time | 84 Cycles |
+| 参数          | 值            |
+| ------------- | ------------- |
+| Channel       | **Channel 1** |
+| Sampling Time | 84 Cycles     |
 
 ### 4. NVIC配置
 
 **System Core → NVIC:**
 
-| 中断 | 使能 | 说明 |
-|------|------|------|
-| ADC1, ADC2 and ADC3 global interrupts | ✓ | 两种回调都需要 |
+| 中断                                  | 使能 | 说明           |
+| ------------------------------------- | ---- | -------------- |
+| ADC1, ADC2 and ADC3 global interrupts | ✓    | 两种回调都需要 |
 
 ### 5. 配置示意图
 
@@ -258,33 +258,10 @@ A:
 2. 确认使用 `HAL_ADCEx_InjectedStart_IT()` 而不是 `_Start()`
 3. 确认 `HAL_ADCEx_InjectedConvCpltCallback` 函数名正确
 
-**Q: 规则通道被打断后停止更新？（可能是HAL库的坑）**
+**Q: 规则通道被打断后停止更新？**
 
-A: 这是实测发现的问题。注入完成后，规则通道的SWSTART位被清除，不会自动恢复。
+A: 详情见blog：[ADC调试踩坑：一个printf引发的“血案”](https://blog.csdn.net/weixin_45716353/article/details/156025275?spm=1001.2014.3001.5501)
 
-寄存器分析：
-```
-注入完成后:
-CR2 = 0x00000403
-  - ADON = 1 (ADC开启)
-  - CONT = 1 (连续模式)
-  - SWSTART = 0 ← 规则启动位被清除！
-
-SR = 0x00000008
-  - STRT = 0 ← 规则通道未运行！
-```
-
-**解决方案：** 在注入完成回调里手动重启规则通道：
-```c
-void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef *hadc)
-{
-    s_injected_value = HAL_ADCEx_InjectedGetValue(hadc, ADC_INJECTED_RANK_1);
-    s_injected_ready = true;
-
-    /* 关键：重新启动规则通道 */
-    s_hadc->Instance->CR2 |= ADC_CR2_SWSTART;
-}
-```
 
 **Q: 注入通道可以用DMA吗？**
 
