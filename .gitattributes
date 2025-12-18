@@ -1,0 +1,51 @@
+# 自动处理换行符
+* text=auto
+
+# C源文件 - 使用CRLF换行（Keil兼容）
+*.c text eol=crlf
+*.h text eol=crlf
+
+# 汇编文件
+*.s text eol=crlf
+*.S text eol=crlf
+
+# 配置文件
+*.json text eol=crlf
+*.yaml text eol=crlf
+*.yml text eol=crlf
+
+# 二进制文件 - 不做任何转换
+*.bin binary
+*.hex binary
+*.axf binary
+*.o binary
+*.lib binary
+*.a binary
+*.png binary
+*.jpg binary
+```
+
+---
+
+## .gitattributes 的作用
+
+**解决跨平台换行符问题：**
+
+| 系统 | 换行符 | 表示 |
+|------|--------|------|
+| Windows/Keil | CRLF | `\r\n` |
+| Linux/Mac | LF | `\n` |
+
+**没有配置时的问题：**
+```
+你（Windows）写代码 → CRLF换行 → 提交
+                                  ↓
+队友（Linux）拉取 → Git自动转成LF → 修改 → 提交
+                                          ↓
+你再拉取 → Git转成CRLF → 整个文件显示"被修改"
+```
+
+**配置后：**
+```
+统一规定：C文件用CRLF
+无论谁提交，无论什么系统，换行符都一致

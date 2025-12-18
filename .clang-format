@@ -1,0 +1,42 @@
+# Clang-Format 配置 - Keil兼容版本
+
+BasedOnStyle: LLVM
+
+# 缩进设置
+IndentWidth: 2
+TabWidth: 2
+UseTab: Never
+IndentCaseLabels: true
+
+# 大括号风格 - Allman（独占一行）
+BreakBeforeBraces: Allman
+
+# 禁止单行写法
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: None
+AllowShortBlocksOnASingleLine: Never
+
+# 行宽限制
+ColumnLimit: 100
+
+# 指针对齐 - 靠近变量名
+PointerAlignment: Right
+
+# 空格控制
+SpaceBeforeParens: ControlStatements
+SpaceBeforeAssignmentOperators: true
+
+# 对齐设置
+AlignConsecutiveAssignments: true
+AlignConsecutiveMacros: true
+AlignTrailingComments: true
+
+# 空行控制
+MaxEmptyLinesToKeep: 2
+
+# 头文件不自动排序
+SortIncludes: Never
+
+# 文件末尾换行
+InsertNewlineAtEOF: true
