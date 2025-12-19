@@ -10,7 +10,7 @@
 - [√] 高级Timer
 - [√] ADC (模数转换器)
 - [ ] DAC (数模转换器)
-- [ ] 低功耗模式
+- [√] LowPower (低功耗模式)
 - [ ] CAN
 - [ ] Bootloader
 ---
@@ -34,8 +34,11 @@ STM32/
 │   ├── AdcTimerTrigger/      # 定时器触发采样
 │   ├── AdcInjected/          # 注入通道
 │   └── AdcWatchdog/          # 模拟看门狗
-│
-└── README.md            # 本文件
+|
+├── LowPower/           # 低功耗相关工程
+│   └── SleepMode/            # 睡眠模式
+|
+└── README.md           # 本文件
 
 ```
 ---
