@@ -146,7 +146,7 @@ HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFI);
 
 ---
 
-## 运行现象
+## 实验现象
 
 ```
 上电 → LED闪烁3次 → 串口打印"Entering Sleep" → 进入Sleep
@@ -155,6 +155,13 @@ HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFI);
                                                     ↓
 唤醒 → 串口打印"Wakeup" → LED亮1秒 → LED闪烁3次 → 再次进入Sleep
 ```
+#### 正常运行时：
+
+<img src="./Doc/正常运行时.png" width="90%" height="90%">
+
+#### 进入低功耗：
+
+<img src="./Doc/进入低功耗.png" width="90%" height="90%">
 
 ---
 
