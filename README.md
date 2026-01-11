@@ -10,9 +10,10 @@
 - [√] 高级Timer
 - [√] ADC (模数转换器)
 - [ ] DAC (数模转换器)
-- [√] LowPower (低功耗模式)
-- [√] SFUD  (串行Flash通用驱动库)
 - [ ] CAN
+- [√] LowPower (低功耗模式)
+- [√] SFUD (串行Flash通用驱动库)
+- [√] FAL (Flash Abstraction Layer - Flash 抽象层)
 - [ ] Bootloader
 ---
 
@@ -42,6 +43,9 @@ STM32/
 |
 ├── SFUD/               # 串行Flash通用驱动库工程
 │   └── sfud/                 # sfud 裸机Demo工程
+|
+├── FAL/                # FAL抽象层工程
+│   └── fal/                  # fal 裸机Demo工程
 |
 └── README.md           # 本文件
 
@@ -105,6 +109,34 @@ STM32F4的ADC支持12位分辨率、多通道扫描、DMA传输、注入通道�
 - 接口统一：提供统一的读、写、擦除 API
 ---
 
+ ## 💽FAL
+ FAL（Flash Abstraction Layer）是 Flash 抽象层，由 armink 开发，作用是：
+
+- 分区管理：将一整块 Flash 划分为多个逻辑分区，按名称访问
+- 统一接口：屏蔽不同 Flash 的差异（片内/片外），提供统一 API
+- 安全隔离：各分区互不干扰，防止误操作
+  
+**FAL 的价值体现在哪里？**
+
+单独使用 FAL 时，价值确实不明显。FAL 只是一层"中间件"，它的真正价值在于：
+
+| 场景 | 没有 FAL | 有 FAL |
+| ----------------- | -------------- | -------------- |
+| FlashDB | 需要自己管理 Flash 地址，容易冲突 | 直接指定分区名，自动隔离 |
+| OTA 升级 | 手动计算 app/download 区地址 | 按分区名操作，代码清晰 |
+| 多 Flash 设备 | 每个设备单独管理，接口不统一 | 统一 API，透明访问 |
+| 固件迁移 | 换 Flash 需要改大量地址 | 只改分区表，应用层不变 |
+| 调试测试 | 需要自己写测试代码 | FAL 自带 Shell 测试命令（RT-Thread）|
+
+**类比理解：**
+
+- SFUD 相当于"硬盘驱动"
+- FAL 相当于"分区表"（类似 Windows 的 C/D/E 盘）
+- FlashDB 相当于"数据库软件"
+
+单独看分区表没意义，但有了分区表，上层软件才能安全地共存。
+
+---
 ## 🛠️ 开发环境
 
 - **MCU**: STM32F429IGT6
