@@ -1,6 +1,6 @@
 # FAL 移植学习笔记
 
-> Flash Abstraction Layer 移植与分析  
+> Flash Abstraction Layer 移植与分析
 > 平台：STM32F429IGT6 + W25Q256 + 裸机（无 RTOS）
 
 ---
@@ -221,11 +221,11 @@ FAL 在初始化时会从 SFUD 获取实际的 Flash 参数：
 static int init(void)
 {
     sfud_dev = sfud_get_device(SFUD_W25Q256_DEVICE_INDEX);
-    
+
     /* 从 SFUD 更新实际参数 */
     nor_flash0.blk_size = sfud_dev->chip.erase_gran;  // 4096
     nor_flash0.len = sfud_dev->chip.capacity;          // 33554432
-    
+
     return 0;
 }
 ```
@@ -243,16 +243,16 @@ int main(void)
     MX_GPIO_Init();
     MX_SPI5_Init();
     MX_USART1_UART_Init();
-    
+
     /* 1. 先初始化 SFUD（底层驱动）*/
     sfud_init();
-    
+
     /* 2. 再初始化 FAL（依赖 SFUD）*/
     fal_init();
-    
+
     /* 3. 后续可以初始化 FlashDB（依赖 FAL）*/
     // fdb_kvdb_init(...);
-    
+
     while (1) { }
 }
 ```
@@ -345,7 +345,7 @@ int fputc(int ch, FILE *f)
 |------|------|----------|
 | fal.h | FlashDB/port/fal/inc/ | 否 |
 | fal_def.h | FlashDB/port/fal/inc/ | 是（裸机适配） |
-| fal_cfg.h | 新建 | - |
+| fal_cfg.h | FlashDB/port/fal/samples/ | 是 |
 | fal.c | FlashDB/port/fal/src/ | 否 |
 | fal_flash.c | FlashDB/port/fal/src/ | 否 |
 | fal_partition.c | FlashDB/port/fal/src/ | 否 |
