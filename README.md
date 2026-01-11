@@ -11,6 +11,7 @@
 - [√] ADC (模数转换器)
 - [ ] DAC (数模转换器)
 - [√] LowPower (低功耗模式)
+- [√] SFUD  (串行Flash通用驱动库)
 - [ ] CAN
 - [ ] Bootloader
 ---
@@ -38,6 +39,9 @@ STM32/
 ├── LowPower/           # 低功耗相关工程
 │   ├── SleepMode/            # 睡眠模式
 │   └── StopMode/             # stop模式
+|
+├── SFUD/               # 串行Flash通用驱动库工程
+│   └── sfud/                 # sfud 裸机Demo工程
 |
 └── README.md           # 本文件
 
@@ -92,6 +96,14 @@ STM32F4的ADC支持12位分辨率、多通道扫描、DMA传输、注入通道�
 | Sleep | mA | 停 | 运行 | 保持 | 任意中断 | 直接继续 |
 | Stop | μA | 停 | **停** | 保持 | **EXTI** | **重配时钟** |
 | Standby | 最低 | 停 | 停 | **丢失** | WKUP/RTC | **复位重启** |
+---
+
+## 📂SFUD
+- 通用性强：支持几乎所有常见 SPI Flash（W25Qxx、GD25Qxx、MX25Lxx 等）
+- SFDP 支持：利用 JEDEC 标准自动读取 Flash 参数，实现即插即用
+- 轻量级：代码精简，适合资源受限的 MCU 环境
+- 接口统一：提供统一的读、写、擦除 API
+---
 
 ## 🛠️ 开发环境
 
